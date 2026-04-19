@@ -6,7 +6,8 @@ LABEL maintainer="jumpiem@gmail.com" \
       description="Home Assistant Add-on mit CUPS und selbst kompiliertem foo2zjs Treiber"
 
 RUN apk update && apk add --no-cache \
-    shadow \
+    sudo \
+    openssl \
     bash \
     build-base \
     cups \
@@ -34,15 +35,21 @@ RUN git clone https://github.com/mikerr/foo2zjs.git /tmp/foo2zjs \
 
 COPY rootfs /
 
-# Add user and disable sudo password checking
-RUN useradd \
-  --groups=sudo,lp,lpadmin \
-  --create-home \
-  --home-dir=/home/print \
-  --shell=/bin/bash \
-  --password=$(mkpasswd print) \
-  print \
-&& sed -i '/%sudo[[:space:]]/ s/ALL[[:space:]]*$/NOPASSWD:ALL/' /etc/sudoers
+# Gruppen erstellen (lpadmin existiert oft nicht standardmäßig)
+RUN addgroup -S lpadmin 2>/dev/null || true
+
+# User hinzufügen und Passwort setzen
+# -D: Kein Passwort erzwingen (wird danach per chpasswd gesetzt)
+# -s: Shell festlegen
+# -h: Home-Verzeichnis
+# -G: Zusätzliche Gruppen (lp, sudo, lpadmin)
+RUN adduser -D -h /home/print -s /bin/bash print \
+    && addgroup print sudo \
+    && addgroup print lp \
+    && addgroup print lpadmin \
+    && echo "print:$(openssl passwd -6 print)" | chpasswd -e \
+    && echo "print ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/print \
+    && chmod 0440 /etc/sudoers.d/print
 
 EXPOSE 631
 
