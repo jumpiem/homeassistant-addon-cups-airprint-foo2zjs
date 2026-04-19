@@ -31,7 +31,6 @@ RUN apk update && apk add --no-cache \
     # Treiber & Rendering (Alternative zu foomatic-db)
     ghostscript \
     gutenprint \
-    foomatic-db-engine \
     # Die tatsächlichen PPD-Dateien und Filter
     cups-filters-libs \
     # Netzwerk & Discovery
