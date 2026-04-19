@@ -10,8 +10,6 @@ RUN apk update && apk add --no-cache \
     build-base \
     cups \
     cups-dev \
-    libcups \
-    libcups-dev \
     git \
     avahi \
     dbus \
