@@ -24,16 +24,16 @@ RUN apk update && apk add --no-cache \
     build-base \
     git \
     lsb-release \
-    # CUPS Kern & Entwicklung
+    # CUPS Kern
     cups \
-    cups-dev \
     cups-libs \
     cups-filters \
-    # Grafik & Rendering (WICHTIG!)
+    # Treiber & Rendering (Alternative zu foomatic-db)
     ghostscript \
     gutenprint \
-    foomatic-db \
     foomatic-db-engine \
+    # Die tatsächlichen PPD-Dateien und Filter
+    cups-filters-libs \
     # Netzwerk & Discovery
     avahi \
     avahi-compat-libdns_sd \
