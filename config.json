@@ -1,7 +1,7 @@
 {
   "name": "CUPS+foo2zjs",
   "version": "1.0",
-  "slug": "cupsik",
+  "slug": "cupsik-foo2zjs",
   "description": "A CUPS print server with working AirPrint + foo2zjs driver",
   "arch": [
     "amd64",

@@ -1,30 +1,46 @@
 ARG BUILD_FROM=ghcr.io/home-assistant/base:latest
 FROM ${BUILD_FROM}
 
-LABEL maintainer="jumpiem@gmail.com" \
-      version="1.0" \
-      description="Home Assistant Add-on mit CUPS und selbst kompiliertem foo2zjs Treiber"
+# Home Assistant Labels
+LABEL \
+    io.hass.name="CUPS+foo2zjs Print Server" \
+    io.hass.description="CUPS Druckserver und selbst kompilierter foo2zjs Treiber für Home Assistant" \
+    io.hass.arch="amd64|aarch64" \
+    io.hass.type="addon" \
+    io.hass.version="1.0.0"
 
 RUN apk update && apk add --no-cache \
-    sudo \
-    openssl \
+    # System & Shell
     bash \
-    build-base \
-    cups \
-    cups-dev \
-    git \
-    avahi \
-    dbus \
-    colord \
-    sudo \
-    samba \
     bash-completion \
     procps \
     nano \
+    sudo \
+    openssl \
     gnupg \
+    xz \
+    curl \
+    # Build & Git
+    build-base \
+    git \
     lsb-release \
-    whois \
+    # CUPS Kern & Entwicklung
+    cups \
+    cups-dev \
+    cups-libs \
     cups-filters \
+    # Grafik & Rendering (WICHTIG!)
+    ghostscript \
+    gutenprint \
+    foomatic-db \
+    foomatic-db-engine \
+    # Netzwerk & Discovery
+    avahi \
+    avahi-compat-libdns_sd \
+    dbus \
+    dbus-libs \
+    whois \
+    colord \
     && rm -rf /var/cache/apk/*
 
 RUN git clone https://github.com/mikerr/foo2zjs.git /tmp/foo2zjs \
@@ -33,21 +49,19 @@ RUN git clone https://github.com/mikerr/foo2zjs.git /tmp/foo2zjs \
     && make install \
     && rm -rf /tmp/foo2zjs
 
+RUN mkdir -p /var/run/dbus && chown messagebus:messagebus /var/run/dbus
+
 COPY rootfs /
 
-# Gruppen erstellen (lpadmin existiert oft nicht standardmäßig)
-RUN addgroup -S lpadmin 2>/dev/null || true
-
-# User hinzufügen und Passwort setzen
-# -D: Kein Passwort erzwingen (wird danach per chpasswd gesetzt)
-# -s: Shell festlegen
-# -h: Home-Verzeichnis
-# -G: Zusätzliche Gruppen (lp, sudo, lpadmin)
+# User anlegen und Gruppen-Zuweisung reparieren
 RUN adduser -D -h /home/print -s /bin/bash print \
+    && addgroup -S sudo 2>/dev/null || true \
+    && addgroup -S lpadmin 2>/dev/null || true \
     && addgroup print sudo \
     && addgroup print lp \
     && addgroup print lpadmin \
     && echo "print:$(openssl passwd -6 print)" | chpasswd -e \
+    && mkdir -p /etc/sudoers.d \
     && echo "print ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/print \
     && chmod 0440 /etc/sudoers.d/print
 
