@@ -39,7 +39,6 @@ RUN apk update && apk add --no-cache \
     avahi-compat-libdns_sd \
     dbus \
     dbus-libs \
-    samba \
     whois \
     colord \
     && rm -rf /var/cache/apk/*
