@@ -4,10 +4,10 @@ FROM ${BUILD_FROM}
 # Home Assistant Labels
 LABEL \
     io.hass.name="CUPS+foo2zjs Print Server" \
-    io.hass.description="CUPS Druckserver und selbst kompilierter foo2zjs Treiber für Home Assistant" \
+    io.hass.description="CUPS printserver + Airprint + foo2zjs driver for Home Assistant" \
     io.hass.arch="amd64|aarch64" \
     io.hass.type="addon" \
-    io.hass.version="1.0.0"
+    io.hass.version="2.0.0"
 
 RUN apk update && apk add --no-cache \
     # System & Shell

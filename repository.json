@@ -1,5 +1,5 @@
 {
-  "name": "Home Assistant CUPS + Airprint Add-On repository + Foo2zjs driver",
+  "name": "Home Assistant CUPS + Airprint + foo2zjs driver Add-On repository",
   "url": "https://github.com/jumpiem/homeassistant-addon-cups-airprint-foo2zjs",
   "maintainer": "Eric Schubert"
 }
