@@ -1,8 +1,8 @@
 {
   "name": "CUPS+foo2zjs",
-  "version": "1.0",
+  "version": "2.0",
   "slug": "cupsik-foo2zjs",
-  "description": "A CUPS print server with working AirPrint + foo2zjs driver",
+  "description": "CUPS printserver + Airprint + foo2zjs driver for Home Assistant",
   "arch": [
     "amd64",
     "aarch64"
