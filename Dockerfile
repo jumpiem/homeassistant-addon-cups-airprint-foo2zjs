@@ -6,6 +6,7 @@ LABEL maintainer="jumpiem@gmail.com" \
       description="Home Assistant Add-on mit CUPS und selbst kompiliertem foo2zjs Treiber"
 
 RUN apk update && apk add --no-cache \
+    shadow \
     bash \
     build-base \
     cups \
